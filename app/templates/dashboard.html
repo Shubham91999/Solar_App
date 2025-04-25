@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar Energy Dashboard</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+
+  <body>
+    <!-- Your existing Navbar code, or just include the navbar again here if needed -->
+    
+    <section id="dashboard" class="container mt-5" style="margin-top: 100px;">
+      <h2 class="text-center text-white">Solar Energy Dashboard</h2>
+
+      <!-- First Chart: Annual Solar Energy Production by County -->
+      <div id="countyChart" style="height: 400px;"></div>
+
+      <!-- Second Chart: Comparison of Different Features for Solar Energy Prediction -->
+      <div id="featuresChart" style="height: 400px;"></div>
+
+      <!-- Third Chart: Geo-map: Solar Energy Production by Location -->
+      <div id="geoMap" style="height: 500px;"></div>
+    </section>
+
+    <script>
+      // Parse the JSON data passed from Flask
+      var countyAvg = JSON.parse('{{ county_avg | tojson }}');
+      var featureData = JSON.parse('{{ feature_data | tojson }}');
+      var mapData = JSON.parse('{{ map_data | tojson }}');
+
+      // Bar chart: Annual Solar Energy Production by County
+      var countyNames = countyAvg.map(function(item) { return item.county; });
+      var solarEnergyValues = countyAvg.map(function(item) { return item.Solar_Energy2022; });
+
+      var barChart = {
+        x: countyNames,
+        y: solarEnergyValues,
+        type: 'bar',
+        marker: { color: 'rgb(50, 171, 96)' }
+      };
+
+      var layoutBar = {
+        title: 'Annual Solar Energy Production by County (2022)',
+        xaxis: { title: 'County' },
+        yaxis: { title: 'Solar Energy Production (kWh)' }
+      };
+
+      Plotly.newPlot('countyChart', [barChart], layoutBar);
+
+      // Line chart: Comparison of Different Features for Solar Energy Prediction
+      var featureNames = Object.keys(featureData);
+      var featureValues = Object.values(featureData);
+
+      var lineChart = {
+        x: featureNames,
+        y: featureValues,
+        type: 'scatter',
+        mode: 'lines+markers',
+        line: { shape: 'linear', color: 'rgb(255, 100, 100)' }
+      };
+
+      var layoutLine = {
+        title: 'Comparison of Features with Solar Energy Production',
+        xaxis: { title: 'Features' },
+        yaxis: { title: 'Correlation with Solar Energy Production' }
+      };
+
+      Plotly.newPlot('featuresChart', [lineChart], layoutLine);
+
+      // Geo-map: Solar Energy Production by Location (Latitude and Longitude)
+      var mapLatitudes = mapData.map(function(item) { return item.latitude; });
+      var mapLongitudes = mapData.map(function(item) { return item.longitude; });
+      var mapEnergy = mapData.map(function(item) { return item.Solar_Energy2022; });
+
+      var geoMap = {
+        type: 'scattergeo',
+        locationmode: 'USA-states',
+        lat: mapLatitudes,
+        lon: mapLongitudes,
+        text: mapEnergy.map(function(item) { return 'Solar Energy: ' + item + ' kWh'; }),
+        marker: {
+          size: 8,
+          color: mapEnergy,
+          colorscale: 'Viridis',
+          colorbar: { title: 'Solar Energy Production (kWh)' }
+        }
+      };
+
+      var layoutMap = {
+        title: 'Solar Energy Production Across Arizona',
+        geo: {
+          scope: 'usa',
+          projection: { type: 'albers usa' },
+          showland: true,
+          landcolor: 'rgb(255, 255, 255)',
+          subunitwidth: 1
+        }
+      };
+
+      Plotly.newPlot('geoMap', [geoMap], layoutMap);
+    </script>
+  </body>
+</html>

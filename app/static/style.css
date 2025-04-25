@@ -1,0 +1,180 @@
+html {
+    scroll-behavior: smooth; /* Enables smooth scrolling */
+
+}
+
+body {
+    background-color: black !important;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    margin: 0;
+    /* background-image: url("./images/solar_background.jpg"); */
+    height: 100%; /* Ensure body takes full height */
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#hero{
+    width: 100%;
+    height: 100%; /* Full screen height */
+}
+/* Fixed navbar styling */
+.navbar {
+    /* Fix the navbar at the top */
+    
+    width: 100%; /* Full width */
+    background-color: #343a40; /* Dark background color for navbar */
+    padding: 15px 0; /* Padding for navbar */
+}
+
+/* Navbar brand (logo) and links */
+.navbar-brand img {
+    height: 40px; /* Set the logo size */
+}
+
+.navbar-nav .nav-link {
+    font-size: 18px;
+    color: white;
+}
+
+/* Ensure sections take full screen height */
+#aboutProject {
+    text-align: center;
+    min-height: 100vh; /* Full screen height for each section */
+    padding: 100px 20px;
+    color: white;
+    /* margin-top: 80px; Add margin-top to prevent overlap with the fixed navbar */
+}
+
+#dashboard {
+    text-align: center;
+    min-height: 100vh; /* Full screen height for each section */
+    padding: 100px 20px;
+    color: white;
+    margin-top: 80px; /* Add margin-top to prevent overlap with the fixed navbar */
+}
+
+#mainContent {
+    align-items: center;
+    width: 100%;
+    height: fit-content;
+    padding-top: 100px;
+}
+
+#chatbot {
+    align-items: center;
+    width: 100%;
+    height: fit-content;
+    padding-top: 100px;
+    min-height: 100vh;
+}
+
+/* Input and button styles */
+input, button {
+    width: 70%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border-bottom: 4px solid black;
+}
+
+/* Button Styles */
+button {
+    background-color: #28a745; /* Green */
+    color: white;
+    padding: 15px 100px;
+    text-align: center;
+    display: inline-block;
+    font-size: 16px;
+    margin-left: 170px;
+    border: none;
+}
+
+/* Submit Button Styles */
+#sub {
+    background-color: #28a745; /* Green */
+    color: white;
+    padding: 15px 100px;
+    text-align: center;
+    display: inline-block;
+    font-size: 16px;
+    margin-left: 170px;
+    border: none;
+}
+
+#predi {
+    margin-left: 160px;
+    color: white;
+    text-align: center;
+}
+
+/* Ensure consistent layout with container */
+.container {
+    max-width: 800px;
+    margin: 0 auto; /* Center the container */
+}
+
+/* Optional: For scrollbars on large content sections */
+
+#predi{
+   margin-left: 0px;
+
+}
+
+form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 40px;
+}
+
+.text-white{
+    font-size: x-large;
+}
+
+/* CSS for Dashboard */
+/* Dashboard Section */
+#dashboard {
+    text-align: center;
+    min-height: 100vh; /* Full screen height for each section */
+    padding: 50px 20px;
+    color: white;
+    margin-top: 100px; /* Adjust the space below the navbar */
+}
+
+/* General Styling for Charts */
+#countyChart, #featuresChart, #geoMap {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    width: 100%;
+    max-width: 100%; /* Ensure charts do not exceed the container width */
+}
+
+/* Title for the dashboard section */
+#dashboard h2 {
+    font-size: 36px;
+    margin-bottom: 40px;
+    color: #fff;
+    font-weight: bold;
+}
+
+/* Styling for the chart container */
+.chart-container {
+    margin: 20px 0;
+    padding: 10px;
+}
+
+/* Responsive styling for smaller screens */
+@media (max-width: 768px) {
+    #countyChart, #featuresChart, #geoMap {
+        width: 100%;
+        height: 300px; /* Adjust height for mobile devices */
+    }
+    
+    #dashboard h2 {
+        font-size: 28px;
+        margin-bottom: 20px;
+    }
+}
