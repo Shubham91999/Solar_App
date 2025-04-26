@@ -1,32 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Solar Energy Prediction</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <!-- Your custom CSS -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+
+    <!-- Plotly for your dashboard charts -->
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
     <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
   </head>
 
   <body>
     <div id="hero">
+      <!-- Navbar -->
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <a class="navbar-brand" href="#">
-          <img src="{{ url_for('static', filename='../static/asu.jpeg') }}" alt="ASU Logo" style="height: 40px;">
+          <img
+            src="{{ url_for('static', filename='asu.jpeg') }}"
+            alt="ASU Logo"
+            style="height: 40px;"
+          />
         </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item ">
+        <div
+          class="collapse navbar-collapse justify-content-end"
+          id="navbarNav"
+        >
+          <ul class="navbar-nav">
+            <li class="nav-item">
               <a class="nav-link" href="#aboutProject">About Project</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+              <a class="nav-link" href="{{ url_for('dashboard') }}"
+                >Dashboard</a
+              >
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#mainContent">Demo</a>
@@ -37,64 +69,137 @@
           </ul>
         </div>
       </nav>
-  
-  
-      
+
       <!-- About Project Section -->
       <div id="aboutProject" class="container mt-5">
-          <h1 class="text-center" style="color: brown;">About the Project</h1>
-          <p class="text-white"><br><br>
-            At Solar Energy Prediction, we are dedicated to harnessing the power of predictive analytics to help advance the use of solar energy. As the world moves towards sustainable energy solutions, solar energy has emerged as a key player in reducing carbon footprints and meeting global energy demands.
-            <br><br>
-            Solar energy production is influenced by a variety of factors such as solar irradiance, temperature, wind speed, and geographical location. Understanding how these factors interact can significantly enhance our ability to predict solar energy outputs, making it possible to optimize energy generation and storage systems.
-            <br><br>
-            Our project focuses on the state of Arizona, a region with abundant sunlight and a high potential for solar energy generation. By gathering and analyzing historical solar energy data, we have developed a predictive model that estimates solar energy production based on real-time environmental factors.
-            <br><br>
-            The goal of this project is to empower stakeholders—including homeowners, businesses, and energy planners—by providing accurate solar energy predictions. This will enable better decision-making in terms of energy usage, sustainability, and cost-efficiency.</p>
+        <h1 class="text-center" style="color: brown;">About the Project</h1>
+        <p class="text-white">
+          <br /><br />
+          At Solar Energy Prediction, we are dedicated to harnessing the power
+          of predictive analytics to help advance the use of solar energy. As
+          the world moves towards sustainable energy solutions, solar energy
+          has emerged as a key player in reducing carbon footprints and meeting
+          global energy demands.
+          <br /><br />
+          Solar energy production is influenced by a variety of factors such
+          as solar irradiance, temperature, wind speed, and geographical
+          location. Understanding how these factors interact can significantly
+          enhance our ability to predict solar energy outputs, making it
+          possible to optimize energy generation and storage systems.
+          <br /><br />
+          Our project focuses on the state of Arizona, a region with abundant
+          sunlight and a high potential for solar energy generation. By
+          gathering and analyzing historical solar energy data, we have
+          developed a predictive model that estimates solar energy production
+          based on real-time environmental factors.
+          <br /><br />
+          The goal of this project is to empower stakeholders—including
+          homeowners, businesses, and energy planners—by providing accurate
+          solar energy predictions. This will enable better decision-making in
+          terms of energy usage, sustainability, and cost-efficiency.
+        </p>
       </div>
-  
+
       <!-- Dashboard Section -->
       <div id="dashboard" class="container mt-5">
-          <h2 class="text-center" style="color: brown;">Dashboard</h2>
-          <p class="text-white">The dashboard displays various analytics of solar energy production across Arizona. You can filter data based on time and location...</p>
+        <h2 class="text-center" style="color: brown;">Dashboard</h2>
+        <p class="text-white">
+          The dashboard displays various analytics of solar energy production
+          across Arizona. You can filter data based on time and location...
+        </p>
       </div>
-  
-      <!-- Demo Section
-      <section id="demo" class="container mt-5">
-          <h2 class="text-center text-white">Demo</h2>
-          <p class="text-white">Watch a live demonstration of how the solar energy prediction model works. This demo allows you to input data and receive predictions...</p>
-      </section> -->
-  
-      <!-- Main Content Section (attached to Demo) -->
+
+      <!-- Main Content (Prediction Form) -->
       <div id="mainContent" class="container mt-5">
-          <h1 class="text-center" style="color: brown;">Solar Energy Prediction Model</h1>
-          <form id= "onsubmit" action="{{ url_for('predict')}}" method="post"> 
-              <input type="text" name="Elevation" placeholder="Elevation" required="required" /><br><br>
-              <input type="text" name="Global_Horizontal_Irradiance" placeholder="GHI" required="required" /><br><br>
-              <input type="text" name="Direct_Normal_Irradiance" placeholder="DNI" required="required" /><br><br>
-              <input type="text" name="Diffuse_Horizontal_Irradiance" placeholder="DHI" required="required" /><br><br>
-              <input type="text" name="Temperature" placeholder="Temperature (°C)" required="required" /><br><br>
-              <input type="text" name="Wind_Speed" placeholder="Wind Speed (m/s)" required="required" /><br><br>
-              <input type="text" name="Surface_Pressure" placeholder="Surface Pressure" required="required" /><br><br>
-              <button type="submit" class="btn btn-primary btn-lg">Predict Solar Energy</button>
-          </form> 
-  
-          <br><br>
-          <h3 id="predi">{{ prediction_text }}</h3>
-        </div>
-  
+        <h1 class="text-center" style="color: brown;">
+          Solar Energy Prediction Model
+        </h1>
+        <form action="{{ url_for('predict') }}" method="post">
+          <input
+            type="text"
+            name="Elevation"
+            placeholder="Elevation"
+            required
+          /><br /><br />
+          <input
+            type="text"
+            name="Global_Horizontal_Irradiance"
+            placeholder="GHI"
+            required
+          /><br /><br />
+          <input
+            type="text"
+            name="Direct_Normal_Irradiance"
+            placeholder="DNI"
+            required
+          /><br /><br />
+          <input
+            type="text"
+            name="Diffuse_Horizontal_Irradiance"
+            placeholder="DHI"
+            required
+          /><br /><br />
+          <input
+            type="text"
+            name="Temperature"
+            placeholder="Temperature (°C)"
+            required
+          /><br /><br />
+          <input
+            type="text"
+            name="Wind_Speed"
+            placeholder="Wind Speed (m/s)"
+            required
+          /><br /><br />
+          <input
+            type="text"
+            name="Surface_Pressure"
+            placeholder="Surface Pressure"
+            required
+          /><br /><br />
+          <button type="submit" class="btn btn-primary btn-lg">
+            Predict Solar Energy
+          </button>
+        </form>
+
+        <br /><br />
+        <h3 id="predi">{{ prediction_text }}</h3>
+      </div>
+
       <!-- Chatbot Section -->
       <div id="chatbot" class="container mt-5">
-          <h2 class="text-center" style="color: brown;">Chatbot</h2>
-          <p class="text-white">Our AI-powered chatbot helps answer your questions related to solar energy production and other project-related queries...</p>
+        <h2 class="text-center" style="color: brown;">
+          Chatbot – {{ assistant_name }}
+        </h2>
+
+        <div id="chat-container"></div>
+
+        <div class="input-group mb-5">
+          <input
+            id="chat-input"
+            type="text"
+            class="form-control"
+            placeholder="Type your question…"
+          />
+          <div class="input-group-append">
+            <button id="send-btn" class="btn btn-primary">Send</button>
+          </div>
+        </div>
       </div>
     </div>
-      <!-- Navbar -->
-      
 
-    <!-- Bootstrap JS, Popper.js, and jQuery (for responsive navbar) -->
+    <!-- jQuery, Popper.js, Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Chat bridge -->
+    <script src="{{ url_for('static', filename='chat.js') }}"></script>
   </body>
 </html>
