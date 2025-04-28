@@ -133,7 +133,7 @@ def dashboard():
 # ─── Chatbot Integration ────────────────────────────────────────────────────────
 
 # 1) Initialize the OpenAI client
-openai.api_key = "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"
+openai.api_key = ""
 client = openai.OpenAI(api_key=openai.api_key)
 ASSISTANT_ID = "asst_8mfKWKTcUehHNUcNHGzCt1Ma"
 
