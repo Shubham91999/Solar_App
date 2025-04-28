@@ -12,7 +12,7 @@
     <!-- Your existing Navbar code, or just include the navbar again here if needed -->
     
     <section id="dashboard" class="container mt-5" style="margin-top: 100px;">
-      <h2 class="text-center text-white">Solar Energy Dashboard</h2>
+      <h2 class="text-center text-yellow">Solar Energy Dashboard</h2>
 
       <!-- First Chart: Annual Solar Energy Production by County -->
       <div id="countyChart" style="height: 400px;"></div>
@@ -22,6 +22,33 @@
 
       <!-- Third Chart: Geo-map: Solar Energy Production by Location -->
       <div id="geoMap" style="height: 500px;"></div>
+
+      <!-- Fourth Chart: Solar Energy Production by Year (2020, 2021, 2022) -->
+      <div id="yearChart" style="height: 400px;"></div>
+
+      <!-- Fifth Chart: Comparison of Features for Solar Energy Prediction -->
+      <div id="featuresComparisonChart" style="height: 400px;"></div>
+
+      <!-- Sixth Chart: Solar Energy Production Vs Temperature -->
+      <div id="scatterPlot" style="height: 500px;"></div>
+
+      <!-- Seventh Scatter Plot: Solar Energy vs Wind Speed -->
+      <div id="scatterWindPlot" style="height: 500px;"></div>
+
+      <!-- Eight Scatter Plot: Solar Energy vs Surface Pressure -->
+      <div id="scatterPressurePlot" style="height: 500px;"></div>
+
+      <!-- Nineth Box Plot: Solar Energy Distribution vs Elevation -->
+      <div id="boxplotElevation" style="height: 500px;"></div>
+
+      <!-- Tenth Scatter Plot: Solar Energy vs Population Density -->
+      <div id="scatterPopDensityPlot" style="height: 500px;"></div>
+
+      <!-- Eleventh Box Plot: Solar Energy Production in Urban vs Non-Urban Areas -->
+      <div id="boxplotUrban" style="height: 500px;"></div>
+
+
+
     </section>
 
     <script>
@@ -29,8 +56,24 @@
       var countyAvg = JSON.parse('{{ county_avg | tojson }}');
       var featureData = JSON.parse('{{ feature_data | tojson }}');
       var mapData = JSON.parse('{{ map_data | tojson }}');
+      var yearData = JSON.parse('{{ year_data | tojson }}'); // Data for Yearly Energy Chart
+      var locationData = JSON.parse('{{ location_data | tojson }}'); // Data for Location Energy Chart
+      var featureComparisonData = JSON.parse('{{ feature_comparison_data | tojson }}'); // Data for Features Comparison
+      var tempData = JSON.parse('{{ temp_data | tojson }}');  // Assuming 'temp_data' is passed as JSON from Flask
+      var windData = JSON.parse('{{ wind_data | tojson }}');  // Assuming 'wind_data' is passed as JSON from Flask
+      var pressureData = JSON.parse('{{ pressure_data | tojson }}');  // Assuming 'pressure_data' is passed as JSON from Flask
+      var elevationData = JSON.parse('{{ elevation_data | tojson }}');  // Assuming 'elevation_data' is passed as JSON from Flask
+      var populationDensityData = JSON.parse('{{ population_density_data | tojson }}');  // Assuming 'population_density_data' is passed as JSON from Flask
+      var urbanData = JSON.parse('{{ urban_data | tojson }}');  // Assuming 'urban_data' is passed as JSON from Flask
 
-      // Bar chart: Annual Solar Energy Production by County
+
+
+
+
+
+
+
+      // 1. Bar chart: Annual Solar Energy Production by County
       var countyNames = countyAvg.map(function(item) { return item.county; });
       var solarEnergyValues = countyAvg.map(function(item) { return item.Solar_Energy2022; });
 
@@ -49,7 +92,7 @@
 
       Plotly.newPlot('countyChart', [barChart], layoutBar);
 
-      // Line chart: Comparison of Different Features for Solar Energy Prediction
+      // 2. Line chart: Comparison of Different Features for Solar Energy Prediction
       var featureNames = Object.keys(featureData);
       var featureValues = Object.values(featureData);
 
@@ -69,7 +112,7 @@
 
       Plotly.newPlot('featuresChart', [lineChart], layoutLine);
 
-      // Geo-map: Solar Energy Production by Location (Latitude and Longitude)
+      // 3. Geo-map: Solar Energy Production by Location (Latitude and Longitude)
       var mapLatitudes = mapData.map(function(item) { return item.latitude; });
       var mapLongitudes = mapData.map(function(item) { return item.longitude; });
       var mapEnergy = mapData.map(function(item) { return item.Solar_Energy2022; });
@@ -100,6 +143,263 @@
       };
 
       Plotly.newPlot('geoMap', [geoMap], layoutMap);
+
+      // 5. Radar chart: Comparison of Features for Solar Energy Prediction
+      var featuresComparison = Object.keys(featureComparisonData);
+      var comparisonValues = Object.values(featureComparisonData);
+
+      var radarChart = {
+        type: 'scatterpolar',
+        r: comparisonValues,
+        theta: featuresComparison,
+        fill: 'toself',
+        mode: 'lines+markers',
+        marker: { color: 'rgb(255, 100, 100)' }
+      };
+
+      var layoutRadar = {
+        title: 'Comparison of Features with Solar Energy Production',
+        polar: {
+          radialaxis: { visible: true, range: [0, Math.max(...comparisonValues)] }
+        }
+      };
+      Plotly.newPlot('featuresComparisonChart', [radarChart], layoutRadar);
+
+
+      // Solar Energy Production by Year (2020, 2021, 2022)
+      // Create a Line chart for Solar Energy Production by Year
+      // 4. Line Chart: Solar Energy Production by Year (2020, 2021, 2022)
+      var years = yearData.map(function(item) { return item.year; });
+      var energyValues = yearData.map(function(item) { return item.solar_energy; });
+
+      var yearlyEnergyChart = {
+        x: years,
+        y: energyValues,
+        type: 'scatter',
+        mode: 'lines+markers',
+        name: 'Solar Energy Production',
+        line: { shape: 'linear' },
+      };
+
+      var layoutYearlyEnergy = {
+        title: 'Solar Energy Production by Year (2020, 2021, 2022)',
+        xaxis: { title: 'Year' },
+        yaxis: { title: 'Solar Energy Production (kWh)' }
+      };
+
+      Plotly.newPlot('yearChart', [yearlyEnergyChart], layoutYearlyEnergy);
+
+      // 6. Scatter plot: Solar Energy Production vs Temperature
+      // Extract temperature and solar energy data
+      var temperatures = tempData.map(function(item) { return item.temp_mean2022; });
+      var solarEnergy = tempData.map(function(item) { return item.Solar_Energy2022; });
+
+      // Create the scatter plot
+      var scatterPlot = {
+        x: temperatures,
+        y: solarEnergy,
+        mode: 'markers',  // This creates a scatter plot
+        type: 'scatter',
+        marker: {
+          color: 'rgb(255, 100, 100)',  // Set marker color
+          size: 10
+        },
+        name: 'Solar Energy vs Temperature'
+      };
+
+      // Define the layout
+      var layout = {
+        title: 'Solar Energy Production vs Temperature',
+        xaxis: {
+          title: 'Temperature (K)'
+        },
+        yaxis: {
+          title: 'Solar Energy Production (kWh)'
+        }
+      };
+
+      // Render the plot
+      Plotly.newPlot('scatterPlot', [scatterPlot], layout);
+
+      // 6. Scatter plot: Solar Energy Production vs Temperature
+      var scatterPlot = {
+        x: temperatures,
+        y: solarEnergy,
+        mode: 'markers',
+        type: 'scatter',
+        marker: { color: 'rgb(255, 100, 100)' }
+      };
+
+      var layoutScatter = {
+        title: 'Solar Energy Production vs Temperature',
+        xaxis: { title: 'Temperature (K)' },
+        yaxis: { title: 'Solar Energy Production (kWh)' }
+      };
+
+      Plotly.newPlot('scatterPlot', [scatterPlot], layoutScatter);
+
+
+      // 7. Scatter plot: Solar Energy Production vs Wind Speed// Extract wind speed and solar energy data
+      var windSpeeds = windData.map(function(item) { return item.wind_mean2022; });
+      var solarEnergy = windData.map(function(item) { return item.Solar_Energy2022; });
+
+      // Create the scatter plot
+      var scatterPlot = {
+        x: windSpeeds,
+        y: solarEnergy,
+        mode: 'markers',  // This creates a scatter plot
+        type: 'scatter',
+        marker: {
+          color: 'rgb(100, 150, 255)',  // Set marker color
+          size: 10
+        },
+        name: 'Solar Energy vs Wind Speed'
+      };
+
+      // Define the layout
+      var layout = {
+        title: 'Solar Energy Production vs Wind Speed',
+        xaxis: {
+          title: 'Wind Speed (m/s)'
+        },
+        yaxis: {
+          title: 'Solar Energy Production (kWh)'
+        }
+      };
+
+      // Render the plot
+      Plotly.newPlot('scatterWindPlot', [scatterPlot], layout);
+
+      // 8. Scatter plot: Solar Energy Production vs Surface Pressure
+      // Extract surface pressure and solar energy data
+      var surfacePressure = pressureData.map(function(item) { return item.sp_mean2022; });
+      var solarEnergy = pressureData.map(function(item) { return item.Solar_Energy2022; });
+
+      // Create the scatter plot
+      var scatterPlot = {
+        x: surfacePressure,
+        y: solarEnergy,
+        mode: 'markers',  // This creates a scatter plot
+        type: 'scatter',
+        marker: {
+          color: 'rgb(50, 171, 96)',  // Set marker color
+          size: 10
+        },
+        name: 'Solar Energy vs Surface Pressure'
+      };
+
+      // Define the layout
+      var layout = {
+        title: 'Solar Energy vs Surface Pressure',
+        xaxis: {
+          title: 'Surface Pressure (hPa)'
+        },
+        yaxis: {
+          title: 'Solar Energy Production (kWh)'
+        }
+      };
+
+      // Render the plot
+      Plotly.newPlot('scatterPressurePlot', [scatterPlot], layout);
+
+      // 9. Box plot: Solar Energy Distribution vs Elevation
+      // Extract elevation and solar energy data
+      var elevations = elevationData.map(function(item) { return item.elevation; });
+      var solarEnergy = elevationData.map(function(item) { return item.Solar_Energy2022; });
+
+      // Create the box plot
+      var boxPlot = {
+        x: elevations,
+        y: solarEnergy,
+        type: 'box',
+        marker: {
+          color: 'rgb(100, 150, 255)'  // Set marker color
+        },
+        boxmean: 'sd',  // This shows the mean and standard deviation
+        name: 'Solar Energy vs Elevation'
+      };
+
+      // Define the layout
+      var layout = {
+        title: 'Solar Energy Distribution Across Different Elevation Levels',
+        xaxis: {
+          title: 'Elevation (meters)'
+        },
+        yaxis: {
+          title: 'Solar Energy Production (kWh)'
+        }
+      };
+
+      // Render the plot
+      Plotly.newPlot('boxplotElevation', [boxPlot], layout);
+
+      // 10. Scatter plot: Solar Energy Production vs Population Density
+      // Extract population density and solar energy data
+      var populationDensity = populationDensityData.map(function(item) { return item.population_density; });
+      var solarEnergy = populationDensityData.map(function(item) { return item.Solar_Energy2022; });
+
+      // Create the scatter plot
+      var scatterPlot = {
+        x: populationDensity,
+        y: solarEnergy,
+        mode: 'markers',  // This creates a scatter plot
+        type: 'scatter',
+        marker: {
+          color: 'rgb(255, 165, 0)',  // Set marker color
+          size: 10
+        },
+        name: 'Solar Energy vs Population Density'
+      };
+
+      // Define the layout
+      var layout = {
+        title: 'Solar Energy vs Population Density',
+        xaxis: {
+          title: 'Population Density (people/km²)'
+        },
+        yaxis: {
+          title: 'Solar Energy Production (kWh)'
+        }
+      };
+
+      // Render the plot
+      Plotly.newPlot('scatterPopDensityPlot', [scatterPlot], layout);
+
+      // 11. Box plot: Solar Energy Production in Urban vs Non-Urban Areas
+      // Extract urban vs non-urban data and solar energy data
+      var urbanAreas = urbanData.map(function(item) { return item.urban; });
+      var solarEnergy = urbanData.map(function(item) { return item.Solar_Energy2022; });
+
+      // Create the box plot
+      var boxPlot = {
+        x: urbanAreas,
+        y: solarEnergy,
+        type: 'box',
+        marker: {
+          color: 'rgb(50, 171, 96)'  // Set marker color
+        },
+        boxmean: 'sd',  // Show mean and standard deviation within the box plot
+        name: 'Solar Energy in Urban vs Non-Urban Areas'
+      };
+
+      // Define the layout
+      var layout = {
+        title: 'Solar Energy Production in Urban vs Non-Urban Areas',
+        xaxis: {
+          title: 'Urban/Non-Urban'
+        },
+        yaxis: {
+          title: 'Solar Energy Production (kWh)'
+        }
+      };
+
+      // Render the plot
+      Plotly.newPlot('boxplotUrban', [boxPlot], layout);
+
+
+
+
+
     </script>
   </body>
 </html>

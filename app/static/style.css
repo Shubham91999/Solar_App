@@ -145,7 +145,7 @@ form{
 }
 
 /* General Styling for Charts */
-#countyChart, #featuresChart, #geoMap {
+#countyChart, #featuresChart, #geoMap, #yearChart, #featuresComparisonChart, #scatterWindPlot, #boxplotElevation, #boxplotUrban {
     margin-top: 30px;
     margin-bottom: 30px;
     width: 100%;
@@ -156,7 +156,7 @@ form{
 #dashboard h2 {
     font-size: 36px;
     margin-bottom: 40px;
-    color: #fff;
+    color: red;
     font-weight: bold;
 }
 
@@ -168,7 +168,7 @@ form{
 
 /* Responsive styling for smaller screens */
 @media (max-width: 768px) {
-    #countyChart, #featuresChart, #geoMap {
+    #countyChart, #featuresChart, #geoMap, #yearChart, #featuresComparisonChart, #scatterWindPlot, #boxplotElevation, #boxplotUrban {
         width: 100%;
         height: 300px; /* Adjust height for mobile devices */
     }

@@ -19,7 +19,7 @@ import openai
 load_dotenv()
 
 app = Flask(__name__, static_folder="static", template_folder="templates")
-app.secret_key = os.getenv("FLASK_SECRET_KEY", "please-change-me")
+# app.secret_key = os.getenv("FLASK_SECRET_KEY", "please-change-me")
 
 # ─── Solar Prediction / Dashboard Setup ────────────────────────────────────────
 model = pickle.load(open("solar_energy_model.pkl", "rb"))
@@ -49,6 +49,7 @@ def predict():
         prediction_text=msg
     )
 
+
 @app.route("/dashboard")
 def dashboard():
     county_avg = (
@@ -57,6 +58,7 @@ def dashboard():
             .reset_index()
             .sort_values("Solar_Energy2022", ascending=False)
     )
+    
     features = [
         "ghi_mean2022", "dni_mean2022", "dhi_mean2022",
         "temp_mean2022", "wind_mean2022", "sp_mean2022"
@@ -68,17 +70,70 @@ def dashboard():
     )
     map_data = data[["latitude", "longitude", "Solar_Energy2022"]].dropna()
 
+    # New Data: Solar Energy by Year (2020, 2021, 2022)
+    year_data = data[['Solar_Energy2020', 'Solar_Energy2021', 'Solar_Energy2022']].mean().reset_index()
+    year_data = year_data.rename(columns={0: 'Solar_Energy2020', 1: 'Solar_Energy2021', 2: 'Solar_Energy2022'})
+    
+    # Data for Solar Energy vs Location (Latitude & Longitude)
+    location_data = data[["latitude", "longitude", "Solar_Energy2022"]].dropna()
+
+    # Data for Comparing Features with Solar Energy
+    feature_comparison_data = {
+        "GHI": feature_corr.get("ghi_mean2022", 0),
+        "DNI": feature_corr.get("dni_mean2022", 0),
+        "DHI": feature_corr.get("dhi_mean2022", 0),
+        "Temperature": feature_corr.get("temp_mean2022", 0),
+        "Wind Speed": feature_corr.get("wind_mean2022", 0),
+    }
+
+    # New Data: Solar Energy by Year (2020, 2021, 2022)
+    year_data = [
+        {'year': '2020', 'solar_energy': data['Solar_Energy2022'].mean()},
+        {'year': '2021', 'solar_energy': data['Solar_Energy2021'].mean()},
+        {'year': '2022', 'solar_energy': data['Solar_Energy2020'].mean()},
+    ]
+
+    temp_data = data[['temp_mean2022', 'Solar_Energy2022']].dropna()
+
+    # Data for Solar Energy vs Wind Speed
+    wind_data = data[['wind_mean2022', 'Solar_Energy2022']].dropna()
+
+    # Data for Solar Energy vs Surface Pressure
+    pressure_data = data[['sp_mean2022', 'Solar_Energy2022']].dropna()
+
+    # Data for Solar Energy vs Elevation
+    elevation_data = data[['elevation', 'Solar_Energy2022']].dropna()
+
+    # Calculate population density (population / landcover)
+    data['population_density'] = data['population'] / data['landcover']
+
+    # Data for Solar Energy vs Population Density
+    population_density_data = data[['population_density', 'Solar_Energy2022']].dropna()
+
+    # Data for Solar Energy in Urban vs Non-Urban Areas
+    urban_data = data[['urban', 'Solar_Energy2022']].dropna()
+
     return render_template(
         "dashboard.html",
-        county_avg   = county_avg.to_dict(orient="records"),
-        feature_data = feature_corr.to_dict(),
-        map_data     = map_data.to_dict(orient="records")
+        county_avg=county_avg.to_dict(orient="records"),
+        feature_data=feature_corr.to_dict(),
+        map_data=map_data.to_dict(orient="records"),
+        year_data=year_data,
+        location_data=location_data.to_dict(orient="records"),
+        feature_comparison_data=feature_comparison_data,
+        temp_data=temp_data.to_dict(orient="records"),
+        wind_data=wind_data.to_dict(orient="records"),
+        pressure_data=pressure_data.to_dict(orient="records"),
+        elevation_data=elevation_data.to_dict(orient="records"),
+        population_density_data=population_density_data.to_dict(orient="records"),
+        urban_data=urban_data.to_dict(orient="records")
+        
     )
 
 # ─── Chatbot Integration ────────────────────────────────────────────────────────
 
 # 1) Initialize the OpenAI client
-openai.api_key = os.getenv("OPENAI_API_KEY", "").strip()
+openai.api_key = "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"
 client = openai.OpenAI(api_key=openai.api_key)
 ASSISTANT_ID = "asst_8mfKWKTcUehHNUcNHGzCt1Ma"
 
